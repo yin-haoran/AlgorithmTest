@@ -2183,4 +2183,30 @@ public class Main {
         return count;
     }
 
+    /**
+     * 礼物的最大价值
+     *
+     * dp.   f(i, j) = max{f(i - 1, j), f(i, j - 1)} + grid[i][j]
+     */
+    public int maxValue(int[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0] == null || grid[0].length == 0) {
+            return 0;
+        }
+
+        int row = grid.length;
+        int col = grid[0].length;
+        // 用来存储上一行的结果值。下标0用来防止越界。
+        int[] dp = new int[col + 1];
+
+        // 一行一行遍历
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                // 求当前行列的最优值。当前位置向上、向左
+                dp[j + 1] = Math.max(dp[j + 1], dp[j]) + grid[i][j];
+            }
+        }
+
+        return dp[col];
+    }
+
 }
