@@ -2209,4 +2209,78 @@ public class Main {
         return dp[col];
     }
 
+    /**
+     * 不含重复字符的最长子串
+     *
+     * 滑动窗口(双指针) + HashMap
+     */
+    public int lengthOfLongestSubstring(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+
+        // 不含重复字符最长子串的长度
+        int maxLength = 0;
+        // 存储字符最近的index,用来优化时间复杂度.
+        // 如果不用map则需要用k从end-1到start遍历去更新start的值.
+        HashMap<Character, Integer> map = new HashMap<>();
+
+        // start和end为滑动窗口的边界，inclusive
+        for (int start = 0, end = 0; end < s.length(); end++) {
+            char curChar = s.charAt(end);
+
+            // 判断滑动窗口是否需要变化
+            int preIndex = map.getOrDefault(curChar, -1);
+            if (preIndex >= start) {
+                start = preIndex + 1;
+            }
+
+            // 更新map
+            map.put(curChar, end);
+            // 更新最值
+            maxLength = Math.max(maxLength, end - start + 1);
+        }
+
+        return maxLength;
+    }
+    /**
+     * dp + HashMap
+     */
+    public int lengthOfLongestSubstring2(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+
+        // 最长子串长度
+        int max = 1;
+        // 当前位置的上一个为结尾的最长子串长度
+        int pre = 1;
+
+        for (int i = 1; i < s.length(); i++) {
+            char curChar = s.charAt(i);
+
+            int j = 1;
+            for (; j <= pre; j++) {
+                if (s.charAt(i - j) == curChar) {
+                    break;
+                }
+            }
+            pre = j;
+            // 空间优化时间
+            /*
+            int preIndex = map.getOrDefault(curChar, -1);
+            if (preIndex < i - pre) {
+                pre++;
+            } else {
+                pre = i - preIndex;
+            }
+            map.put(curChar, i);
+             */
+
+            max = Math.max(max, pre);
+        }
+
+        return max;
+    }
+
 }
